@@ -64,11 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 
-  void _calculate(int i) {}
-
   @override
   Widget build(BuildContext context) {
-    int c = 0;
     return Scaffold(
       appBar: buildAppBar(
         context,
@@ -93,6 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
             onTap: () {
               setState(() => _counters[index]++);
             },
+            onLongPress: () => _showSnack("longpress"),
           );
         },
       ),
