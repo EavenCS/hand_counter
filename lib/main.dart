@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'config/theme/appbar.dart';
 
 void main() => runApp(const MyApp());
 
@@ -25,57 +26,80 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final List<String> _items = [];
+  final List<int> _counters = [];
 
-  void _incrementCounter() {
-    setState(() => _counter++);
+  void _addItem() async {
+    final controller = TextEditingController();
+    final name = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Neues Item hinzufügen'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(hintText: 'Name eingeben'),
+          autofocus: true,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Abbrechen'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, controller.text),
+            child: const Text('Hinzufügen'),
+          ),
+        ],
+      ),
+    );
+    if (name != null && name.isNotEmpty) {
+      setState(() {
+        _items.add(name);
+        _counters.add(0);
+      });
+    }
   }
 
   void _showSnack(String text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 
+  void _calculate(int i) {}
+
   @override
   Widget build(BuildContext context) {
+    int c = 0;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        leadingWidth: 96, // Platz für 2 IconButtons
-        leading: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              tooltip: 'Hinzufügen',
-              icon: const Icon(Icons.add_box),
-              onPressed: _incrementCounter,
-            ),
-            IconButton(
-              tooltip: 'Suchen',
-              icon: const Icon(Icons.filter_list),
-              onPressed: () => _showSnack('Filter gedrückt'),
-            ),
-          ],
-        ),
-
-        actions: [
-          IconButton(
-            tooltip: 'Einstellungen',
-            icon: const Icon(Icons.settings),
-            onPressed: () => _showSnack('Settings gedrückt'),
-          ),
-        ],
+      appBar: buildAppBar(
+        context,
+        onAdd: _addItem,
+        onFilter: () => _showSnack('Filter gedrückt'),
+        onSettings: () => _showSnack('Settings gedrückt'),
       ),
 
-      body: Center(
-        child: Text(
-          '$_counter',
-          style: Theme.of(context).textTheme.displayLarge,
-        ),
+      body: ListView.builder(
+        itemCount: _items.length,
+        itemBuilder: (context, index) {
+          // Synchronisiere Counter-Liste falls nötig
+          while (_counters.length <= index) {
+            _counters.add(0);
+          }
+          return ListTile(
+            title: Text(_items[index]),
+            trailing: Text(
+              '${_counters[index]}',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            onTap: () {
+              setState(() => _counters[index]++);
+            },
+          );
+        },
       ),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        onPressed: _addItem,
+        tooltip: 'Add',
         child: const Icon(Icons.add),
       ),
     );
