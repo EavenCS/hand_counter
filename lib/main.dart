@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'config/theme/appbar.dart';
 
 void main() => runApp(const MyApp());
@@ -11,7 +12,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Hand Counter',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 143, 25, 25),
+        ),
       ),
       home: const MyHomePage(),
     );
@@ -75,22 +78,36 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
 
       body: ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         itemCount: _items.length,
         itemBuilder: (context, index) {
-          // Synchronisiere Counter-Liste falls nötig
           while (_counters.length <= index) {
             _counters.add(0);
           }
-          return ListTile(
-            title: Text(_items[index]),
-            trailing: Text(
-              '${_counters[index]}',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Material(
+              color: Colors.green,
+              borderRadius: BorderRadius.circular(14),
+              clipBehavior: Clip.antiAlias,
+              child: ListTile(
+                title: Text(
+                  _items[index],
+                  style: const TextStyle(color: Colors.white),
+                ),
+                trailing: Text(
+                  '${_counters[index]}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                onTap: () => setState(() => _counters[index]++),
+                onLongPress: () => _showSnack("longpress"),
+              ),
             ),
-            onTap: () {
-              setState(() => _counters[index]++);
-            },
-            onLongPress: () => _showSnack("longpress"),
           );
         },
       ),
@@ -98,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: _addItem,
         tooltip: 'Add',
-        child: const Icon(Icons.add),
+        child: const Icon(CupertinoIcons.add_circled_solid),
       ),
     );
   }

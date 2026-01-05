@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 AppBar buildAppBar(
   BuildContext context, {
@@ -7,19 +8,19 @@ AppBar buildAppBar(
   required VoidCallback onSettings,
 }) {
   return AppBar(
-    backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+    backgroundColor: Colors.transparent,
     leadingWidth: 96,
     leading: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         IconButton(
           tooltip: 'Hinzufügen',
-          icon: const Icon(Icons.add_box),
+          icon: const Icon(CupertinoIcons.add_circled_solid),
           onPressed: onAdd,
         ),
         IconButton(
-          tooltip: 'Suchen',
-          icon: const Icon(Icons.filter_list),
+          tooltip: 'Filter',
+          icon: const Icon(CupertinoIcons.line_horizontal_3_decrease),
           onPressed: onFilter,
         ),
       ],
@@ -27,7 +28,7 @@ AppBar buildAppBar(
     actions: [
       IconButton(
         tooltip: 'Einstellungen',
-        icon: const Icon(Icons.settings),
+        icon: const Icon(CupertinoIcons.settings),
         onPressed: onSettings,
       ),
     ],
