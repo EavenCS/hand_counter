@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'config/theme/appbar.dart';
+import 'pages/edit_counter.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  // debugPaintSizeEnabled = false;
+  //debugPaintBaselinesEnabled = false;
+
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -37,10 +45,10 @@ class _MyHomePageState extends State<MyHomePage> {
     final name = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Neues Item hinzufügen'),
+        title: const Text('Neuer Zähler'),
         content: TextField(
           controller: controller,
-          decoration: const InputDecoration(hintText: 'Name eingeben'),
+          decoration: const InputDecoration(hintText: 'Zählername'),
           autofocus: true,
         ),
         actions: [
@@ -105,7 +113,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 onTap: () => setState(() => _counters[index]++),
-                onLongPress: () => _showSnack("longpress"),
+                onLongPress: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditCounter(
+                      initialName: _items[index],
+                      initialValue: _counters[index],
+                    ),
+                  ),
+                ),
               ),
             ),
           );
