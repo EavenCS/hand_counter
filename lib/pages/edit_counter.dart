@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class EditCounter extends StatefulWidget {
   final String initialName;
@@ -17,6 +18,7 @@ class EditCounter extends StatefulWidget {
 class _EditCounterState extends State<EditCounter> {
   late final TextEditingController _nameController;
   late final TextEditingController _valueController;
+  Color? _selectedColor;
 
   @override
   void initState() {
@@ -42,6 +44,19 @@ class _EditCounterState extends State<EditCounter> {
           "Edit",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Löschen gedrückt'),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            },
+            icon: const Icon(CupertinoIcons.trash),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -79,13 +94,41 @@ class _EditCounterState extends State<EditCounter> {
 
                       return Row(
                         children: [
-                          _buildColumnButton(effectiveWidth, Colors.blue),
-                          _buildColumnButton(effectiveWidth, Colors.green),
-                          _buildColumnButton(effectiveWidth, Colors.orange),
-                          _buildColumnButton(effectiveWidth, Colors.purple),
-                          _buildColumnButton(effectiveWidth, Colors.red),
-                          _buildColumnButton(effectiveWidth, Colors.yellow),
-                          _buildColumnButton(effectiveWidth, Colors.pink),
+                          _buildColumnButton(
+                            effectiveWidth,
+                            Colors.blue,
+                            _selectedColor == Colors.blue,
+                          ),
+                          _buildColumnButton(
+                            effectiveWidth,
+                            Colors.green,
+                            _selectedColor == Colors.green,
+                          ),
+                          _buildColumnButton(
+                            effectiveWidth,
+                            Colors.orange,
+                            _selectedColor == Colors.orange,
+                          ),
+                          _buildColumnButton(
+                            effectiveWidth,
+                            Colors.purple,
+                            _selectedColor == Colors.purple,
+                          ),
+                          _buildColumnButton(
+                            effectiveWidth,
+                            Colors.red,
+                            _selectedColor == Colors.red,
+                          ),
+                          _buildColumnButton(
+                            effectiveWidth,
+                            Colors.yellow,
+                            _selectedColor == Colors.yellow,
+                          ),
+                          _buildColumnButton(
+                            effectiveWidth,
+                            Colors.pink,
+                            _selectedColor == Colors.pink,
+                          ),
                         ],
                       );
                     },
@@ -106,22 +149,26 @@ class _EditCounterState extends State<EditCounter> {
     );
   }
 
-  Widget _buildColumnButton(double width, Color color) {
+  Widget _buildColumnButton(double width, Color color, bool isSelected) {
     return Container(
       width: width,
       height: width,
       margin: const EdgeInsets.symmetric(horizontal: 3),
       child: OutlinedButton(
         onPressed: () {
-          // Button action
+          setState(() {
+            _selectedColor = color;
+          });
         },
         style: OutlinedButton.styleFrom(
           backgroundColor: color,
           padding: EdgeInsets.zero,
-          side: BorderSide(color: color, width: 1),
+          side: BorderSide(color: isSelected ? Colors.white : color),
           shape: const CircleBorder(),
         ),
-        child: const SizedBox(),
+        child: isSelected
+            ? const Icon(CupertinoIcons.check_mark, color: Colors.white, size: 20)
+            : const SizedBox(),
       ),
     );
   }
