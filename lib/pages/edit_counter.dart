@@ -65,6 +65,35 @@ class _EditCounterState extends State<EditCounter> {
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 24),
+            Container(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final screenWidth = MediaQuery.of(context).size.width;
+                      final columnWidth = (screenWidth - 64) / 5;
+                      final effectiveWidth =
+                          (columnWidth > 120 ? columnWidth : 80.0) / 2;
+
+                      return Row(
+                        children: [
+                          _buildColumnButton(effectiveWidth, Colors.blue),
+                          _buildColumnButton(effectiveWidth, Colors.green),
+                          _buildColumnButton(effectiveWidth, Colors.orange),
+                          _buildColumnButton(effectiveWidth, Colors.purple),
+                          _buildColumnButton(effectiveWidth, Colors.red),
+                          _buildColumnButton(effectiveWidth, Colors.yellow),
+                          _buildColumnButton(effectiveWidth, Colors.pink),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -73,6 +102,26 @@ class _EditCounterState extends State<EditCounter> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildColumnButton(double width, Color color) {
+    return Container(
+      width: width,
+      height: width,
+      margin: const EdgeInsets.symmetric(horizontal: 3),
+      child: OutlinedButton(
+        onPressed: () {
+          // Button action
+        },
+        style: OutlinedButton.styleFrom(
+          backgroundColor: color,
+          padding: EdgeInsets.zero,
+          side: BorderSide(color: color, width: 1),
+          shape: const CircleBorder(),
+        ),
+        child: const SizedBox(),
       ),
     );
   }
